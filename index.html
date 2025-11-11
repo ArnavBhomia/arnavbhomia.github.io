@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnav's Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-primary': '#3b82f6', // Blue 500
+                        'brand-secondary': '#1e40af', // Blue 800
+                        'gray-primary': '#111827', // Gray 900
+                        'gray-secondary': '#1f2937', // Gray 800
+                        'gray-tertiary': '#374151', // Gray 700
+                        'gray-quaternary': '#9ca3af', // Gray 400
+                        'gray-light': '#f3f4f6', // Gray 100
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #030712; /* Richer dark background */
+            color: #d1d5db; /* Gray 300 */
+        }
+        .section-title {
+            @apply text-3xl font-bold text-white mb-8 tracking-tight;
+        }
+        .card {
+            @apply bg-gray-secondary border border-gray-tertiary rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+        }
+        .tag {
+            @apply inline-block bg-brand-primary/10 text-brand-primary font-medium px-3 py-1 rounded-full text-xs;
+        }
+        .btn {
+            @apply inline-block px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-primary;
+        }
+        .btn-primary {
+            @apply bg-brand-primary text-white hover:bg-brand-secondary focus:ring-brand-primary;
+        }
+        .btn-secondary {
+            @apply bg-gray-tertiary text-gray-light hover:bg-gray-quaternary/20 focus:ring-gray-quaternary;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header / Nav -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-primary/80 backdrop-blur-md border-b border-gray-tertiary">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="#" class="text-xl font-bold text-white">Arnav Bhomia</a>
+                <div class="hidden sm:flex sm:space-x-8">
+                    <a href="#about" class="text-gray-quaternary hover:text-white transition-colors">About</a>
+                    <a href="#experience" class="text-gray-quaternary hover:text-white transition-colors">Experience</a>
+                    <a href="#projects" class="text-gray-quaternary hover:text-white transition-colors">Projects</a>
+                    <a href="#skills" class="text-gray-quaternary hover:text-white transition-colors">Skills</a>
+                    <a href="#contact" class="text-gray-quaternary hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="pt-16 pb-24 text-center">
+            <!-- TODO: Add your profile picture here -->
+            <!-- 1. Upload a photo (e.g., 'profile-picture.jpg') to your repository -->
+            <!-- 2. Change 'profile-picture.jpg' in the line below to your file's name -->
+            <img src="profile-picture.jpg" alt="Arnav Bhomia" class="w-48 h-48 rounded-full mx-auto mb-6 border-4 border-slate-500"
+                onerror="this.src='https://placehold.co/128x128/374151/9ca3af?text=AB'; this.onerror=null;">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tighter mb-6">
+                Arnav Bhomia
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg sm:text-xl md:text-2xl text-gray-quaternary mb-10 leading-relaxed">
+                An Electrical & Electronics Engineering student and aspiring Data Analyst with hands-on experience in <strong class="text-white">Python, SQL, and PowerBI</strong>. I don't just analyze data, I build complete data-driven solutions from the ground up.
+            </p>
+            <div class="flex justify-center items-center space-x-4">
+                <a href="#projects" class="btn btn-primary">Projects</a>
+                <!-- TODO: Add a link to your resume PDF (e.g., hosted on GitHub) -->
+                <a href="ArnavBhomia-CV.pdf" class="btn btn-secondary">Resume</a>
+                <a href="https://linkedin.com/in/arnavbhomia" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    LinkedIn
+                    <svg class="inline w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 448 512">
+                        <path d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/arnavbhomia" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    GitHub
+                    <svg class="inline w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-24">
+            <h2 class="section-title">About Me</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-12">
+                <div class="md:col-span-3 pt-8">
+                    <p class="text-lg text-gray-quaternary leading-relaxed mb-4">
+                        Hello, I'm Arnav Bhomia. I'm a Data Analyst Enthusiast and an Electrical & Electronics Engineering student at Manipal Institute of Technology.
+                    </p>
+                    <p class="text-lg text-gray-quaternary leading-relaxed mb-4">
+                        My passion is at the intersection of quantitative analysis and practical application. For me, data isn't just about finding insights, It's about building tools that utilize those insights. I'm as comfortable performing statistical analysis in a Jupyter Notebook or building advanced SQL queries as I am developing a full-stack Python application with a custom GUI.
+                    </p>
+                    <p class="text-lg text-gray-quaternary leading-relaxed mb-4">
+                        In my projects and my internship at Convexicon, I've had hands-on experience with the full data lifecycle. This includes everything from ETL, data cleaning, and exploratory data analysis to building predictive models with Scikit-learn, creating business-facing dashboards in Power BI, and even implementing RAG techniques with LangChain and ChromaDB.
+                    </p>
+                    <p class="text-lg text-gray-quaternary leading-relaxed">
+                        I'm driven by a need to understand how things work and to then build something better. I'm currently seeking an internship where I can apply my unique blend of analytical and technical development skills to solve challenging problems.
+                    </p>
+                </div>
+                <div class="md:col-span-2">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">Education</h3>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white">Manipal Institute of Technology</h4>
+                            <p class="text-sm text-gray-quaternary">Bachelor of Technology, Electrical & Electronics Engineering</p>
+                            <p class="text-sm text-gray-quaternary">2022 - 2026</p>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white">N. K. Bagrodia Public School</h4>
+                            <p class="text-sm text-gray-quaternary">Class XII, CBSE (86.8%)</p>
+                            <p class="text-sm text-gray-quaternary">2021</p>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white mb-4 mt-6">Certifications</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-gray-quaternary">
+                                <svg class="w-4 h-4 mr-2 text-brand-primary flex-shrink-0" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5zM10.036 4.464a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 8 10.036 5.172a.5.5 0 0 1 0-.707zM5.964 4.464a.5.5 0 0 1 0 .707L3.207 8l2.757 2.828a.5.5 0 0 1-.707.707l-3-3a.5.5 0 0 1 0-.707l3-3a.5.5 0 0 1 .707 0zM8 10.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z"/></svg>
+                                <!-- TODO: Add your certificate link here -->
+                                <a href="https://coursera.org/share/163ac1540f8decdde119c54a7d4e8727" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">
+                                    Google Data Analytics Professional Certificate
+                                </a>
+                            </li>
+                            <li class="flex items-center text-gray-quaternary">
+                                <svg class="w-4 h-4 mr-2 text-brand-primary flex-shrink-0" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5zM10.036 4.464a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 8 10.036 5.172a.5.5 0 0 1 0-.707zM5.964 4.464a.5.5 0 0 1 0 .707L3.207 8l2.757 2.828a.5.5 0 0 1-.707.707l-3-3a.5.5 0 0 1 0-.707l3-3a.5.5 0 0 1 .707 0zM8 10.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z"/></svg>
+                                <!-- TODO: Add your certificate link here -->
+                                <a href="https://www.hackerrank.com/certificates/f4f9bd089dff" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">
+                                    SQL (Advanced) Certificate - HackerRank
+                                </a>
+                            </li>
+                            <li class="flex items-center text-gray-quaternary">
+                                <svg class="w-4 h-4 mr-2 text-brand-primary flex-shrink-0" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5zM10.036 4.464a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 8 10.036 5.172a.5.5 0 0 1 0-.707zM5.964 4.464a.5.5 0 0 1 0 .707L3.207 8l2.757 2.828a.5.5 0 0 1-.707.707l-3-3a.5.5 0 0 1 0-.707l3-3a.5.5 0 0 1 .707 0zM8 10.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z"/></svg>
+                                <!-- TODO: Add your certificate link here -->
+                                <a href="https://coursera.org/share/6d1bf3c33f6c6059cc85e0fb44e32a9a" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">
+                                    HTML, CSS, and JavaScript for Web Developers
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24">
+            <h2 class="section-title">Experience</h2>
+            <div class="card">
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Summer Intern</h3>
+                            <p class="text-lg text-brand-primary font-medium">Convexicon, Gurgaon, IN</p>
+                        </div>
+                        <p class="text-gray-quaternary text-sm flex-shrink-0">Jun 2025 – Jul 2025</p>
+                    </div>
+                    <ul class="list-disc list-outside space-y-3 pl-5 text-gray-quaternary text-lg">
+                        <li>Performed large-scale analysis of thousands of business support queries to identify common patterns and user intent, providing the data foundation for an automated AI-powered chatbot.</li>
+                        <li>Engineered data-driven answers by implementing Retrieval-Augmented Generation (RAG) techniques to query a central knowledge base, significantly improving the relevancy of context-aware responses.</li>
+                        <li>Designed and refined core system logic for more effective user intent recognition, which directly contributed to a measured improvement in chatbot response efficiency and accuracy.</li>
+                        <li>Mapped and optimized the complete end-to-end project data flow, spanning from initial user query processing through to the final data-driven answer generation phase.</li>
+                    </ul>
+                    <div class="mt-6">
+                        <span class="tag">Python |</span>
+                        <span class="tag">Pandas |</span>
+                        <span class="tag">LangChain |</span>
+                        <span class="tag">Hugging Face |</span>
+                        <span class="tag">ChromaDB</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-24">
+            <h2 class="section-title">Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project 1: Zomato -->
+                <div class="card flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <img src="zomato.png" alt="Zomato Project Visual" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-white mb-2">Zomato Data Analysis & Predictive Modeling</h3>
+                        <p class="text-gray-quaternary mb-4 text-sm">
+                            End-to-end analysis of 9,500+ Zomato listings, from data cleaning and statistical testing to predictive modeling and market segmentation.
+                        </p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-gray-quaternary text-sm mb-6">
+                            <li>Proved a statistically significant link between table booking and higher ratings using a T-test.</li>
+                            <li>Built a Linear Regression model quantifying that "Votes" can explain 41.3% (R-squared) of a restaurant's rating.</li>
+                            <li>Developed a K-Means Clustering model to identify 4 distinct business clusters for market segmentation.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-gray-primary/50 border-t border-gray-tertiary">
+                        <div class="mb-4">
+                            <span class="tag">Python |</span>
+                            <span class="tag">Pandas |</span>
+                            <span class="tag">Scikit-learn |</span>
+                            <span class="tag">Matplotlib |</span>
+                            <span class="tag">Seaborn</span>
+                        </div>
+                        <a href="https://github.com/arnavbhomia/zomato-data-analysis" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full text-center">
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 2: Consumer Growth -->
+                <div class="card flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <img src="powerbi.png" alt="Power BI Dashboard Visual" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-white mb-2">Consumer Growth Analytics</h3>
+                        <p class="text-gray-quaternary mb-4 text-sm">
+                            Analyzed a 3,900-record dataset using advanced SQL and Power BI to identify key revenue drivers and customer segments.
+                        </p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-gray-quaternary text-sm mb-6">
+                            <li>Executed 16 advanced SQL (PostgreSQL) queries, identifying that male customers drove 68% ($157.9K) of revenue.</li>
+                            <li>Identified "Young Adults" as the top-earning segment (27% of revenue).</li>
+                            <li>Created a Power BI dashboard to track KPIs ($233K Total Revenue, $59.76 AOV) and reveal key business insights.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-gray-primary/50 border-t border-gray-tertiary">
+                        <div class="mb-4">
+                            <span class="tag">SQL |</span>
+                            <span class="tag">PostgreSQL |</span>
+                            <span class="tag">Power BI |</span>
+                            <span class="tag">Python |</span>
+                            <span class="tag">Pandas</span>
+                        </div>
+                        <a href="https://github.com/arnavbhomia/consumer-growth-analytics" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full text-center">
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3: SarpBhasha -->
+                <div class="card flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <img src="sarpbhasha.png" alt="SarpBhasha Application" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-white mb-2">SarpBhasha: Standalone Python Translator</h3>
+                        <p class="text-gray-quaternary mb-4 text-sm">
+                            A complete, standalone desktop translator application built from scratch, managing the full software development lifecycle.
+                        </p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-gray-quaternary text-sm mb-6">
+                            <li>Developed a standalone desktop application with a custom-designed, theme-aware (Light/Dark mode) GUI.</li>
+                            <li>Integrated multiple external APIs for real-time translation, language auto-detection, and text-to-speech.</li>
+                            <li>Managed the full SDLC, from library selection to final packaging as a distributable .exe installer using PyInstaller.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-gray-primary/50 border-t border-gray-tertiary">
+                        <div class="mb-4">
+                            <span class="tag">Python |</span>
+                            <span class="tag">CustomTkinter |</span>
+                            <span class="tag">APIs |</span>
+                            <span class="tag">gTTS |</span>
+                            <span class="tag">PyInstaller |</span>
+                            <span class="tag">Git</span>
+                        </div>
+                        <a href="https://github.com/arnavbhomia/sarpbhasha" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full text-center">
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-24">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Programming Languages</h3>
+                    <ul class="space-y-2 text-gray-quaternary">
+                        <li>• Python</li>
+                        <li>• SQL</li>
+                        <li>• MATLAB</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Data Visualization</h3>
+                    <ul class="space-y-2 text-gray-quaternary">
+                        <li>• Tableau</li>
+                        <li>• Power BI</li>
+                        <li>• Matplotlib</li>
+                        <li>• Seaborn</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Libraries & Frameworks</h3>
+                    <ul class="space-y-2 text-gray-quaternary">
+                        <li>• Pandas</li>
+                        <li>• NumPy</li>
+                        <li>• Scikit-learn</li>
+                        <li>• LangChain</li>
+                        <li>• Hugging Face</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Tools & Databases</h3>
+                    <ul class="space-y-2 text-gray-quaternary">
+                        <li>• Advanced Excel</li>
+                        <li>• Google Analytics</li>
+                        <li>• Git & GitHub</li>
+                        <li>• Jupyter Notebooks</li>
+                        <li>• ChromaDB</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">Get In Touch</h2>
+            <p class="text-xl text-gray-quaternary mb-8 max-w-lg mx-auto">
+                I'm actively seeking Summer 2026 internship opportunities. If you think my skills and experience would be a good fit, I'd love to hear from you.
+            </p>
+            <a href="mailto:aierienie@gmail.com" class="btn btn-primary btn-lg text-lg">
+                Email Me: aierienie@gmail.com
+            </a>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-tertiary mt-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-quaternary">
+            <p>&copy; 2025 Arnav Bhomia</p>
+        </div>
+    </footer>
+</body>
+</html>
