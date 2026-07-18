@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Arnav Bhomia | APM Portfolio",
+  title: "Arnav Bhomia | Portfolio",
   description: "Associate Product Manager Portfolio",
   icons: {
     icon: [
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="antialiased">
         {children}
       </body>

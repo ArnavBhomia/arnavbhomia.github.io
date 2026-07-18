@@ -166,10 +166,30 @@ export default function Home() {
   const [formState, setFormState] = useState<"idle" | "error" | "success">("idle");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isDark) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-  }, [isDark]);
+  const toggleTheme = () => {
+    const nextThemeIsDark = !isDark;
+    
+    // Temporarily disable standard CSS fades for a clean wipe
+    document.documentElement.classList.add("no-transitions");
+
+    // Fallback for browsers that don't support View Transitions yet
+    if (!document.startViewTransition) {
+      setIsDark(nextThemeIsDark);
+      if (nextThemeIsDark) document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+      setTimeout(() => document.documentElement.classList.remove("no-transitions"), 10);
+      return;
+    }
+
+    // Trigger the cinematic wipe
+    document.startViewTransition(() => {
+      if (nextThemeIsDark) document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+      setIsDark(nextThemeIsDark);
+    }).finished.then(() => {
+      document.documentElement.classList.remove("no-transitions");
+    });
+  };
 
   const navItems = ["About", "Experience", "Projects", "Skills", "Contact"];
 
@@ -313,7 +333,7 @@ export default function Home() {
           ))}
         </div>
 
-        <button onClick={() => setIsDark(!isDark)} className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors duration-500 flex-shrink-0">
+        <button onClick={toggleTheme} className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors duration-500 flex-shrink-0">
           <AnimatePresence mode="wait">
             {isDark ? (
               <motion.div key="moon" initial={{ rotate: -90, scale: 0 }} animate={{ rotate: 0, scale: 1 }} exit={{ rotate: 90, scale: 0 }} transition={{ duration: 0.15 }} className="absolute">

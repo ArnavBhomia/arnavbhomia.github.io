@@ -55,3 +55,31 @@ body {
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
+
+/* =========================================
+   SMOOTH THEME WIPE ANIMATION
+   ========================================= */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: wipe-bottom-left 0.7s cubic-bezier(0.25, 1, 0.3, 1) both;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+@keyframes wipe-bottom-left {
+  from { clip-path: circle(0% at 0% 100%); }
+  to { clip-path: circle(200% at 0% 100%); }
+}
+
+/* Prevents muddy colors by pausing standard CSS transitions during the wipe */
+.no-transitions * {
+  transition: none !important;
+}
