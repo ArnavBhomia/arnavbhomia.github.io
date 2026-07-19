@@ -284,7 +284,7 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
@@ -294,14 +294,25 @@ export default function Home() {
       return;
     }
 
+    // Dynamically set the subject based on the active tab
+    const customSubject = contactIntent === "Hire Me" 
+      ? "PoPi - Somebody wants to hire you" 
+      : "PoPi - New Avenue";
+
     try {
-      await fetch("https://formspree.io/f/mnjednrq", {
+      await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify({
-          subject: `New Portfolio Lead: ${contactIntent}`,
+          access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE", // Paste your free key here
+          subject: customSubject, 
+          from_name: "Portfolio Contact Terminal",
           email: emailInput,
           message: messageInput,
+          Category: contactIntent
         }),
       });
       setFormState("success");
