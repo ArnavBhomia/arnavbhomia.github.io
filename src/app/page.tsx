@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
-import { Moon, Sun, Check, MapPin, AlertCircle } from "lucide-react";
+import { Moon, Sun, Check, MapPin, AlertCircle, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // =========================================
@@ -161,18 +161,20 @@ export default function Home() {
   const [activeProjectTab, setActiveProjectTab] = useState("DEFCOM");
   const [contactIntent, setContactIntent] = useState("Hire Me");
   
+  // Mobile Menu State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+
   const [emailInput, setEmailInput] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const [formState, setFormState] = useState<"idle" | "error" | "success">("idle");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // View Transitions Theme Toggle
   const toggleTheme = () => {
     const nextThemeIsDark = !isDark;
-    
-    // Temporarily disable standard CSS fades for a clean wipe
     document.documentElement.classList.add("no-transitions");
 
-    // Fallback for browsers that don't support View Transitions yet
     if (!document.startViewTransition) {
       setIsDark(nextThemeIsDark);
       if (nextThemeIsDark) document.documentElement.classList.add("dark");
@@ -181,7 +183,6 @@ export default function Home() {
       return;
     }
 
-    // Trigger the cinematic wipe
     document.startViewTransition(() => {
       if (nextThemeIsDark) document.documentElement.classList.add("dark");
       else document.documentElement.classList.remove("dark");
@@ -211,6 +212,34 @@ export default function Home() {
       if (subTab) setActiveProjectTab(subTab);
     }
   }, []);
+
+  // Custom Touch Handlers for Hold-and-Slide Menu
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsMobileMenuOpen(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isMobileMenuOpen) return;
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element) {
+      const tabElement = element.closest('[data-tab]');
+      if (tabElement) {
+        setHoveredTab(tabElement.getAttribute('data-tab'));
+      } else {
+        setHoveredTab(null);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (hoveredTab) {
+      handleScrollTo(hoveredTab);
+    }
+    setIsMobileMenuOpen(false);
+    setHoveredTab(null);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -248,7 +277,7 @@ export default function Home() {
           if (entry.isIntersecting) setActiveTab(entry.target.id);
         });
       },
-      { threshold: 0.2 } // Reduced threshold for better mobile detection
+      { threshold: 0.2 }
     );
     const sections = document.querySelectorAll("section");
     sections.forEach((section) => observer.observe(section));
@@ -310,13 +339,62 @@ export default function Home() {
       <LiquidBackground isDark={isDark} />
 
       {/* =========================================
+          MOBILE MENU OVERLAY (Hold & Slide)
+          ========================================= */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(16px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="fixed inset-0 z-[45] bg-white/80 dark:bg-black/80 flex flex-col items-center justify-center touch-none"
+          >
+            <div className="flex flex-col gap-4 items-center w-full max-w-sm px-6">
+              <span className="text-xs font-semibold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-4">Slide to Select</span>
+              {navItems.map((item) => (
+                <button
+                  key={item}
+                  data-tab={item}
+                  onClick={() => {
+                    handleScrollTo(item);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full py-4 text-xl md:text-2xl font-bold tracking-tight rounded-2xl transition-all duration-300 ${
+                    hoveredTab === item
+                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 scale-105 shadow-xl"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-white/50 dark:bg-white/5"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================
           TOP FLOATING NAVIGATION 
           ========================================= */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl flex justify-between items-center px-4 py-3 rounded-full bg-white/80 dark:bg-black/50 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-sm transition-colors duration-500">
-        <button onClick={() => handleScrollTo("Hero")} className="w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-transparent flex-shrink-0 bg-slate-100 dark:bg-slate-800 transition-colors duration-500">
+      <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-full md:w-[95%] max-w-5xl flex justify-between items-center px-6 md:px-4 py-3 md:rounded-full md:bg-white/80 dark:md:bg-black/50 md:backdrop-blur-xl md:border md:border-slate-200 dark:md:border-white/10 transition-colors duration-500 bg-transparent border-transparent">
+        
+        {/* Mobile Menu Toggle - Hold & Slide */}
+        <button 
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="md:hidden relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/50 dark:border-white/10 transition-colors duration-500 flex-shrink-0 touch-none"
+        >
+          <Menu className="w-5 h-5 text-slate-800 dark:text-slate-200" />
+        </button>
+
+        {/* Desktop Logo */}
+        <button onClick={() => handleScrollTo("Hero")} className="hidden md:block w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-transparent flex-shrink-0 bg-slate-100 dark:bg-slate-800 transition-colors duration-500">
           <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/100x100/e2e8f0/64748b?text=AB"; }} />
         </button>
         
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 absolute left-1/2 -translate-x-1/2">
           {navItems.map((item) => (
             <button 
@@ -333,7 +411,8 @@ export default function Home() {
           ))}
         </div>
 
-        <button onClick={toggleTheme} className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors duration-500 flex-shrink-0">
+        {/* Theme Toggle */}
+        <button onClick={toggleTheme} className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/50 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors duration-500 flex-shrink-0">
           <AnimatePresence mode="wait">
             {isDark ? (
               <motion.div key="moon" initial={{ rotate: -90, scale: 0 }} animate={{ rotate: 0, scale: 1 }} exit={{ rotate: 90, scale: 0 }} transition={{ duration: 0.15 }} className="absolute">
@@ -357,24 +436,43 @@ export default function Home() {
             1. HERO SECTION 
             ========================================= */}
         <section id="Hero" className="snap-start w-full min-h-[100dvh] flex items-center justify-center pt-28 pb-12">
-          <div className="max-w-5xl w-[95%] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-16">
+          <div className="max-w-5xl w-[95%] mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
             
-            <div className="flex-1 space-y-4 w-full text-center lg:text-left">
-              <p className="text-base md:text-lg font-light text-slate-600 dark:text-slate-400 transition-colors duration-500">
+            {/* HERO TEXT (Mobile: Bottom, Desktop: Left) */}
+            <div className="order-2 lg:order-1 flex-1 w-full text-center lg:text-left flex flex-col items-center lg:items-start">
+              <p className="text-base md:text-lg font-light text-slate-600 dark:text-slate-400 transition-colors duration-500 mb-2">
                 Hey. I'm Arnav Bhomia, an incoming
               </p>
-              <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.05] text-slate-900 dark:text-white flex flex-col justify-center lg:justify-between transition-colors duration-500">
+              
+              <h1 className="text-[12vw] sm:text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.05] text-slate-900 dark:text-white flex flex-col justify-center lg:justify-between transition-colors duration-500">
                 <span className="text-transparent [-webkit-text-stroke:1px_#0f172a] dark:[-webkit-text-stroke:1px_#ffffff] lg:[-webkit-text-stroke:1.5px_#0f172a] lg:dark:[-webkit-text-stroke:1.5px_#ffffff] transition-colors duration-500">Associate</span>
                 <span className="block mt-1">Product</span>
                 <span className="block">Manager</span>
               </h1>
-              <p className="text-base md:text-lg font-light text-slate-600 dark:text-slate-400 max-w-md mx-auto lg:mx-0 leading-relaxed pt-4 min-h-[4rem] md:min-h-[5rem] transition-colors duration-500">
-                Shipping products from 0 to 1. Bridging the gap between complex engineering and <BioTypewriter words={["user experience.", "data-driven insights.", "AI architectures.", "business strategy."]} />
+              
+              {/* Typewriter text on its own line */}
+              <p className="text-sm sm:text-base md:text-lg font-light text-slate-600 dark:text-slate-400 max-w-md mx-auto lg:mx-0 leading-relaxed pt-4 md:min-h-[5rem] transition-colors duration-500">
+                Shipping products from 0 to 1. Bridging the gap between complex engineering
+                <span className="block mt-1">and <BioTypewriter words={["user experience.", "data-driven insights.", "AI architectures.", "business strategy."]} /></span>
               </p>
+
+              {/* ACTION BUTTONS (Visible strictly on Mobile, under text) */}
+              <div className="flex lg:hidden items-center justify-center gap-3 w-full pt-6">
+                <a href="/Arnav_Bhomia_APM_Resume.pdf" target="_blank" className="px-8 py-3 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-xs md:text-sm shadow-lg group transition-colors duration-500 flex items-center justify-center w-auto">
+                  <span className="group-hover:scale-105 transition-transform duration-300 ease-out inline-block">Resume</span>
+                </a>
+                <a href="https://linkedin.com/in/arnavbhomia" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
+                  <LinkedInIcon className="w-4 h-4 group-hover:scale-105 transition-transform duration-300" />
+                </a>
+                <a href="https://github.com/arnavbhomia" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
+                  <GitHubIcon className="w-4 h-4 group-hover:scale-105 transition-transform duration-300" />
+                </a>
+              </div>
             </div>
 
-            <div className="flex flex-col items-center lg:items-end w-full lg:w-auto">
-              <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 mb-6 md:mb-8 cursor-pointer group">
+            {/* HERO IMAGE (Mobile: Top, Desktop: Right) */}
+            <div className="order-1 lg:order-2 flex flex-col items-center lg:items-end w-full lg:w-auto">
+              <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 mb-4 md:mb-8 cursor-pointer group flex-shrink-0">
                 <div className="absolute inset-0 rounded-full border border-slate-200 dark:border-white/10 shadow-2xl bg-[#ababab] transition-colors duration-500" />
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] h-[120%] z-20 [clip-path:inset(0_0_50%_0)] overflow-visible">
                   <img src="/profile-transparent.png" alt="Arnav Bhomia" className="w-full h-full object-cover object-bottom origin-bottom transition-transform duration-300 group-hover:scale-[1.02]" onError={(e) => { (e.target as HTMLImageElement).src = "/profile.jpg"; (e.target as HTMLImageElement).className="w-full h-full object-cover rounded-full" }}/>
@@ -386,15 +484,16 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center lg:justify-end gap-3 md:gap-4 w-full lg:w-72">
-                <a href="/Arnav_Bhomia_APM_Resume.pdf" target="_blank" className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-xs md:text-sm shadow-lg group transition-colors duration-500">
+              {/* ACTION BUTTONS (Visible strictly on Desktop, under image) */}
+              <div className="hidden lg:flex items-center justify-end gap-4 w-72">
+                <a href="/Arnav_Bhomia_APM_Resume.pdf" target="_blank" className="px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm shadow-lg group transition-colors duration-500 flex items-center justify-center w-auto">
                   <span className="group-hover:scale-105 transition-transform duration-300 ease-out inline-block">Resume</span>
                 </a>
-                <a href="https://linkedin.com/in/arnavbhomia" target="_blank" className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
-                  <LinkedInIcon className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-105 transition-transform duration-300" />
+                <a href="https://linkedin.com/in/arnavbhomia" target="_blank" className="flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
+                  <LinkedInIcon className="w-5 h-5 group-hover:scale-105 transition-transform duration-300" />
                 </a>
-                <a href="https://github.com/arnavbhomia" target="_blank" className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
-                  <GitHubIcon className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-105 transition-transform duration-300" />
+                <a href="https://github.com/arnavbhomia" target="_blank" className="flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-400 text-slate-700 dark:text-slate-300 group transition-colors duration-500">
+                  <GitHubIcon className="w-5 h-5 group-hover:scale-105 transition-transform duration-300" />
                 </a>
               </div>
             </div>
@@ -602,7 +701,6 @@ export default function Home() {
               
               {/* Zomato Card */}
               <a href="https://github.com/ArnavBhomia/zomato_data_analysis" target="_blank" rel="noopener noreferrer" className="md:col-span-2 p-6 md:p-8 rounded-3xl bg-white/40 dark:bg-black/30 backdrop-blur-xl border border-slate-200 dark:border-white/5 shadow-lg flex flex-col justify-between relative overflow-hidden group transition-all duration-300 min-h-[220px] md:min-h-[260px]">
-                {/* GitHub Pill */}
                 <div className="absolute top-4 right-4 md:top-6 md:right-6 h-8 md:h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 flex items-center justify-start px-2.5 md:px-3 w-8 md:w-10 group-hover:w-[110px] md:group-hover:w-[130px] transition-all duration-300 overflow-hidden shadow-sm z-30">
                   <div className="flex items-center gap-2 text-[10px] md:text-xs font-semibold text-slate-800 dark:text-white whitespace-nowrap min-w-max">
                     <GitHubIcon className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
@@ -664,8 +762,6 @@ export default function Home() {
             
             {/* Part A: Apple Watch App Drawer Scatter Layout */}
             <div className="relative w-full h-[280px] md:h-[400px] mx-auto overflow-hidden rounded-3xl transition-colors duration-500">
-              
-              {/* Scattered Circular Icons (Permanent White Background) */}
               {skillsScattered.map((skill) => (
                 <motion.div 
                   key={skill.name}
@@ -676,7 +772,6 @@ export default function Home() {
                   <img src={`/${skill.src}`} alt={skill.name} className="w-full h-full object-contain drop-shadow-sm group-hover:drop-shadow-md transition-all" onError={(e) => (e.currentTarget.style.display = 'none')} />
                 </motion.div>
               ))}
-
             </div>
 
             {/* Part B: Full Skills Array */}
@@ -745,7 +840,7 @@ export default function Home() {
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="Let's chat! Drop your email below." 
-                    className={`w-full px-4 py-3 md:py-3.5 rounded-xl bg-white/50 dark:bg-black/30 border focus:border-slate-400 dark:focus:border-white/20 text-xs md:text-sm font-light text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-inner ${formState === 'error' ? 'border-rose-400 dark:border-rose-500' : 'border-slate-200 dark:border-white/10'}`}
+                    className={`w-full px-4 py-3 md:py-3.5 rounded-xl bg-white/50 dark:bg-black/30 border focus:border-slate-400 dark:focus:border-white/20 text-base md:text-sm font-light text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-inner ${formState === 'error' ? 'border-rose-400 dark:border-rose-500' : 'border-slate-200 dark:border-white/10'}`}
                   />
                   <AnimatePresence>
                     {formState === "error" && (
@@ -760,7 +855,7 @@ export default function Home() {
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   placeholder="Optional: Drop a link or add a quick note..." 
-                  className="w-full px-4 py-3 md:py-3.5 rounded-xl bg-white/50 dark:bg-black/30 border border-slate-200 dark:border-white/10 focus:border-slate-400 dark:focus:border-white/20 text-xs md:text-sm font-light text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-inner resize-none h-20 md:h-24 mt-2"
+                  className="w-full px-4 py-3 md:py-3.5 rounded-xl bg-white/50 dark:bg-black/30 border border-slate-200 dark:border-white/10 focus:border-slate-400 dark:focus:border-white/20 text-base md:text-sm font-light text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-inner resize-none h-20 md:h-24 mt-2"
                 />
                 
                 <button 
