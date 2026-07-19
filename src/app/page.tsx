@@ -307,7 +307,7 @@ const handleFormSubmit = async (e: React.FormEvent) => {
           "Accept": "application/json"
         },
         body: JSON.stringify({
-          access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE", // Paste your free key here
+          access_key: "e7b72c06-0d67-4a72-9467-fd22cde1f2c2", // Paste your free key here
           subject: customSubject, 
           from_name: "Portfolio Contact Terminal",
           email: emailInput,
