@@ -514,13 +514,13 @@ export default function Home() {
               ]} />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
-              <div className="space-y-4 md:space-y-6 w-full mt-0 md:mt-2">
-                <p className="text-sm md:text-base font-light text-slate-700 dark:text-slate-400 leading-relaxed transition-colors duration-500">
-                  I am an analytical thinker who thrives at the intersection of quantitative data and human-centric design. Starting in Electrical & Electronics Engineering, I learned how to architect complex, high-stakes systems from the ground up. 
+            <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start md:items-stretch">
+              <div className="flex flex-col justify-center space-y-6 md:space-y-8 w-full mt-0 md:mt-2 h-full">
+                <p className="text-base md:text-lg text-justify font-light text-slate-700 dark:text-slate-400 leading-relaxed md:leading-loose transition-colors duration-500">
+                  I am an analytical thinker who thrives at the intersection of quantitative data and human centric design. Starting in Electrical & Electronics Engineering, I learned how to architect complex, high stakes systems from the ground up.
                 </p>
-                <p className="text-sm md:text-base font-light text-slate-700 dark:text-slate-400 leading-relaxed transition-colors duration-500">
-                  Today, I apply that same rigorous logic to Product Management—transforming raw data into intuitive tools that solve real business bottlenecks. I don't just crunch numbers; I leverage them to dictate product strategy.
+                <p className="text-base md:text-lg text-justify font-light text-slate-700 dark:text-slate-400 leading-relaxed md:leading-loose transition-colors duration-500">
+                  Today, I apply that same rigorous logic to Product Management transforming raw data into intuitive tools that solve real business bottlenecks. I don't just crunch numbers, I leverage them to dictate product strategy.
                 </p>
               </div>
 
